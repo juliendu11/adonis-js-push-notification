@@ -1,0 +1,11 @@
+
+{{{
+  exports({ to: app.configPath('push_notification.ts') })
+}}}
+import { defineConfig } from '@juliendu11/adonis-js-push-notification'
+
+export default defineConfig({
+ clientEmail: '',
+ privateKey: '',
+ projectId: '',
+})
