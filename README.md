@@ -1,5 +1,3 @@
-[![NPM](https://nodei.co/npm/@juliendu11/adonis-js-push-notification.png)](https://npmjs.org/package/@juliendu11/adonis-js-push-notification)
-
 # AdonisJS Push Notification
 
 Add support for sending push notifications via the Firebase Cloud Messaging API.
