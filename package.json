@@ -37,6 +37,10 @@
     "typecheck": "tsc --noEmit",
     "version": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juliendu11/adonis-js-push-notification"
+  },
   "keywords": [
     "adonisjs",
     "push",
