@@ -29,3 +29,51 @@ options there.
 | stubUrl      | If you want to stub Firebase with another external service, which is useful during the development phase to view notifications, I've created a dashboard for that [here](https://github.com/juliendu11/push-notification-catcher). | Optional |
 
 \* can find this information in the service account file, which you can find in the Google console or Firebase.
+
+## How to use
+
+You can use the PushNotification service in your controllers or services by directly using the service, like this:
+
+```typescript
+import pushNotification from '@juliendu11/adonis-js-push-notification/services/main'
+
+@inject()
+export default class NotificationService {
+
+  async send() {
+    await pushNotification.sendToToken(<TOKEN>, <FcmNotification>, <FcmData>)
+  }
+}
+```
+
+or by injecting it via the AdonisJS container:
+
+```typescript
+const pushNotification = await this.app.container.make('pushNotification')
+await pushNotification.sendToToken(<TOKEN>, <FcmNotification>, <FcmData>)
+```
+
+or
+
+```typescript
+
+@inject()
+export default class NotificationController {
+  constructor(protected pushNotification: PushNotification) {
+  }
+}
+```
+
+### Methods
+
+The PushNotification service provides the following methods:
+
+| Name        | Description                                      |
+|-------------|--------------------------------------------------|
+| sendToToken | Sends a message to an FCM push token             |
+| sendToTopic | Send a message to a topic (Topic name)           |
+| sendRaw     | Basic method used by sendToToken and sendToTopic |
+
+## Info
+
+- [FCM Google API Doc](https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages/send)

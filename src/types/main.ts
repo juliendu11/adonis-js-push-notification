@@ -29,11 +29,3 @@ export type GoogleAccessTokenResponse = {
   expires_in: number
   token_type: string
 }
-
-export abstract class PushNotificationCore {
-  abstract sendRaw(message: any): Promise<any>
-
-  abstract sendToToken(token: string, notification?: FcmNotification, data?: FcmData): Promise<any>
-
-  abstract sendToTopic(topic: string, notification?: FcmNotification, data?: FcmData): Promise<any>
-}

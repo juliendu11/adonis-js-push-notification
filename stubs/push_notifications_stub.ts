@@ -1,19 +1,9 @@
-import {
-  FcmData,
-  FcmNotification,
-  PushNotificationConfig,
-  PushNotificationCore,
-} from '../src/types/main.js'
+import { PushNotification } from '../src/push_notification.js'
+import FCMSendException from '../src/exceptions/fcm_exception.js'
 
-export class PushNotificationStub implements PushNotificationCore {
-  #config: PushNotificationConfig
-
-  constructor(config: PushNotificationConfig) {
-    this.#config = config
-  }
-
+export class PushNotificationStub extends PushNotification {
   async sendRaw(message: any): Promise<any> {
-    const res = await fetch(this.#config.stubUrl as string, {
+    const res = await fetch(this.config.stubUrl as string, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -24,25 +14,9 @@ export class PushNotificationStub implements PushNotificationCore {
     const json = await res.json()
 
     if (!res.ok) {
-      throw new Error(`Erreur FCM (${res.status} ${res.statusText})`)
+      throw new FCMSendException(res.status, res.statusText)
     }
 
     return json
-  }
-
-  async sendToToken(token: string, notification?: FcmNotification, data?: FcmData): Promise<any> {
-    return this.sendRaw({
-      token,
-      notification,
-      data,
-    })
-  }
-
-  async sendToTopic(topic: string, notification?: FcmNotification, data?: FcmData): Promise<any> {
-    return this.sendRaw({
-      topic,
-      notification,
-      data,
-    })
   }
 }

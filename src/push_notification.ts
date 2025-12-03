@@ -5,17 +5,18 @@ import {
   FcmNotification,
   GoogleAccessTokenResponse,
   PushNotificationConfig,
-  PushNotificationCore,
 } from './types/main.js'
+import OAuthException from './exceptions/oauth_exception.js'
+import FCMSendException from './exceptions/fcm_exception.js'
 
-export class PushNotification implements PushNotificationCore {
-  #config: PushNotificationConfig
+export class PushNotification {
+  config: PushNotificationConfig
 
   #cachedToken: string | null = null
   #expiresAt: number = 0
 
   constructor(config: PushNotificationConfig) {
-    this.#config = config
+    this.config = config
   }
 
   private async getAccessToken() {
@@ -29,15 +30,15 @@ export class PushNotification implements PushNotificationCore {
     const exp = iat + 3600 // 1h
 
     const payload = {
-      iss: this.#config.clientEmail,
-      sub: this.#config.clientEmail,
+      iss: this.config.clientEmail,
+      sub: this.config.clientEmail,
       aud: 'https://oauth2.googleapis.com/token',
       scope: 'https://www.googleapis.com/auth/firebase.messaging',
       iat,
       exp,
     }
 
-    const jwtToken = jwt.sign(payload, this.#config.privateKey, {
+    const jwtToken = jwt.sign(payload, this.config.privateKey, {
       algorithm: 'RS256',
     })
 
@@ -54,7 +55,7 @@ export class PushNotification implements PushNotificationCore {
 
     if (!res.ok) {
       const text = await res.text()
-      throw new Error(`Erreur OAuth FCM (${res.status} ${res.statusText}): ${text}`)
+      throw new OAuthException(res.status, res.statusText, text)
     }
 
     const data = (await res.json()) as GoogleAccessTokenResponse
@@ -69,7 +70,7 @@ export class PushNotification implements PushNotificationCore {
     const accessToken = await this.getAccessToken()
 
     const res = await fetch(
-      `https://fcm.googleapis.com/v1/projects/${this.#config.projectId}/messages:send`,
+      `https://fcm.googleapis.com/v1/projects/${this.config.projectId}/messages:send`,
       {
         method: 'POST',
         headers: {
@@ -83,7 +84,7 @@ export class PushNotification implements PushNotificationCore {
     const json = await res.json()
 
     if (!res.ok) {
-      throw new Error(`Erreur FCM (${res.status} ${res.statusText})`)
+      throw new FCMSendException(res.status, res.statusText)
     }
 
     return json
