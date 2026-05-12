@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken'
-import {
+import type {
   FcmData,
   FcmMessageOptions,
   FcmNotification,
   GoogleAccessTokenResponse,
   PushNotificationConfig,
-} from './types/main.js'
+} from './types.js'
 import OAuthException from './exceptions/oauth_exception.js'
 import FCMSendException from './exceptions/fcm_exception.js'
 

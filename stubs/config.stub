@@ -1,4 +1,3 @@
-
 {{{
   exports({ to: app.configPath('push_notification.ts') })
 }}}

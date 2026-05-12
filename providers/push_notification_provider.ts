@@ -1,8 +1,14 @@
-import '../src/types/extended.js'
+import '../src/types.js'
 import type { ApplicationService } from '@adonisjs/core/types'
 import { PushNotification } from '../src/push_notification.js'
-import type { PushNotificationConfig } from '../src/types/main.js'
+import type { PushNotificationConfig } from '../src/types.js'
 import { PushNotificationStub } from '../stubs/push_notifications_stub.js'
+
+declare module '@adonisjs/core/types' {
+  export interface ContainerBindings {
+    pushNotification: PushNotification
+  }
+}
 
 export default class PushNotificationProvider {
   constructor(protected app: ApplicationService) {}

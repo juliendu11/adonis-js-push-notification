@@ -1,6 +1,6 @@
 import { getActiveTest } from '@japa/runner'
 import { IgnitorFactory } from '@adonisjs/core/factories'
-import { defineConfig } from '../index.js'
+import type { defineConfig } from '../index.js'
 
 const BASE_URL = new URL('./tmp/', import.meta.url)
 

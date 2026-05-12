@@ -7,6 +7,6 @@
 |
 */
 
-export { configure } from './configure.js'
+export { configure } from './configure.ts'
 export { defineConfig } from './src/define_config.js'
-export { stubsRoot } from './stubs/main.js'
+export { stubsRoot } from './stubs/main.ts'

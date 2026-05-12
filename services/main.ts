@@ -1,5 +1,5 @@
 import app from '@adonisjs/core/services/app'
-import { PushNotification } from '../src/push_notification.js'
+import type { PushNotification } from '../src/push_notification.js'
 
 let pushNotification: PushNotification
 

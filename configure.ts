@@ -7,19 +7,20 @@
 | command. You are free to perform any operations inside this function to
 | configure the package.
 |
-| To make things easier, you have access to the underlying "ConfigureCommand"
+| To make things easier, you have access to the underlying "Configure"
 | instance and you can use codemods to modify the source files.
 |
 */
 
-import ConfigureCommand from '@adonisjs/core/commands/configure'
+import type Configure from '@adonisjs/core/commands/configure'
+
 import { stubsRoot } from './stubs/main.js'
 
-export async function configure(command: ConfigureCommand) {
-  const codemods = await command.createCodemods()
+export async function configure(_command: Configure) {
+  const codemods = await _command.createCodemods()
 
   // Publish config file
-  await codemods.makeUsingStub(stubsRoot, 'config/push_notification.stub', {})
+  await codemods.makeUsingStub(stubsRoot, 'config.stub', {})
 
   // Add provider to rc file
   await codemods.updateRcFile((rcFile) => {

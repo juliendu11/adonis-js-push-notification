@@ -1,45 +1,42 @@
 {
   "name": "@juliendu11/adonis-js-push-notification",
   "description": "Enables the addition of support for sending FCM push notifications",
-  "version": "0.0.4",
+  "version": "0.0.0",
   "engines": {
-    "node": ">=20.6.0"
+    "node": ">=24.0.0"
   },
   "type": "module",
   "files": [
-    "src",
-    "providers",
-    "index.ts",
-    "configure.ts",
-    "build"
+    "build",
+    "!build/bin",
+    "!build/tests"
   ],
   "main": "build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./push_notification_provider": "./build/providers/push_notification_provider.js",
-    "./services/main": "./build/services/push_notification.js",
-    "./types": "./build/src/types/main.js"
-  },
-  "scripts": {
-    "build": "npm run compile",
-    "clean": "del-cli build",
-    "compile": "npm run clean && tsc",
-    "copy:templates": "copyfiles \"stubs/**/**/*.stub\" build",
-    "format": "prettier --write .",
-    "lint": "eslint . --ext=.ts",
-    "postcompile": "npm run copy:templates",
-    "precompile": "npm run lint",
-    "prepublishOnly": "npm run build",
-    "pretest": "npm run lint",
-    "quick:test": "node --enable-source-maps --loader=ts-node-maintained/esm bin/test.ts",
-    "release": "npx release-it",
-    "test": "c8 npm run quick:test",
-    "typecheck": "tsc --noEmit",
-    "version": "npm run build"
+    "./types": "./build/src/types.js",
+    "./services/main": "./build/services/main.js",
+    "./push_notification_provider": "./build/providers/push_notification_provider.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/juliendu11/adonis-js-push-notification"
+  },
+  "scripts": {
+    "copy:templates": "copyfiles --up 1 \"stubs/**/*.stub\" build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "quick:test": "node --import=@poppinss/ts-exec --enable-source-maps bin/test.ts",
+    "pretest": "npm run lint",
+    "test": "c8 npm run quick:test",
+    "precompile": "npm run lint",
+    "compile": "tsdown && tsc --emitDeclarationOnly --declaration",
+    "postcompile": "npm run copy:templates",
+    "build": "npm run compile",
+    "release": "release-it",
+    "version": "npm run build",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "adonisjs",
@@ -55,38 +52,81 @@
   "author": "juliendu11",
   "license": "MIT",
   "devDependencies": {
-    "@adonisjs/assembler": "^7.8.2",
-    "@adonisjs/core": "^6.12.0",
-    "@adonisjs/eslint-config": "2.0.0-beta.7",
-    "@adonisjs/prettier-config": "^1.4.0",
-    "@adonisjs/tsconfig": "^1.3.0",
-    "@japa/assert": "^3.0.0",
-    "@japa/runner": "^3.1.4",
-    "@swc/core": "^1.6.3",
+    "@adonisjs/assembler": "^8.0.0",
+    "@adonisjs/core": "^7.0.1",
+    "@adonisjs/eslint-config": "^3.0.0",
+    "@adonisjs/prettier-config": "^1.4.5",
+    "@adonisjs/tsconfig": "^2.0.0",
+    "@japa/assert": "^4.2.0",
+    "@japa/runner": "^5.3.0",
+    "@poppinss/ts-exec": "^1.4.4",
+    "@release-it/conventional-changelog": "^10.0.5",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^20.14.5",
-    "c8": "^10.1.2",
+    "@types/node": "^25.3.5",
+    "c8": "^11.0.0",
     "copyfiles": "^2.4.1",
-    "del-cli": "^5.1.0",
-    "eslint": "^9.15.0",
-    "fastify": "^5.6.2",
-    "np": "^10.0.6",
-    "prettier": "^3.3.2",
-    "ts-node-maintained": "^10.9.4",
-    "typescript": "^5.4.5"
+    "cross-env": "^10.1.0",
+    "eslint": "^10.0.3",
+    "fastify": "^5.8.5",
+    "prettier": "^3.8.1",
+    "release-it": "^19.2.4",
+    "tsdown": "^0.21.0",
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
-    "@adonisjs/core": "^6.2.0"
+    "@adonisjs/assembler": "^8.0.0",
+    "@adonisjs/core": "^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@adonisjs/assembler": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public",
-    "tag": "latest"
+    "provenance": true
   },
-  "np": {
-    "message": "chore(release): %s",
-    "tag": "latest",
-    "branch": "main",
-    "anyBranch": false
+  "tsdown": {
+    "entry": [
+      "./index.ts",
+      "./configure.ts",
+      "src/types.ts",
+      "providers/push_notification_provider.ts",
+      "services/main.ts"
+    ],
+    "outDir": "./build",
+    "clean": true,
+    "format": "esm",
+    "minify": "dce-only",
+    "fixedExtension": false,
+    "dts": false,
+    "treeshake": false,
+    "sourcemaps": false,
+    "target": "esnext"
+  },
+  "release-it": {
+    "git": {
+      "requireCleanWorkingDir": true,
+      "requireUpstream": true,
+      "commitMessage": "chore(release): ${version}",
+      "tagAnnotation": "v${version}",
+      "push": true,
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true
+    },
+    "npm": {
+      "publish": true,
+      "skipChecks": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": {
+          "name": "angular"
+        }
+      }
+    }
   },
   "c8": {
     "reporter": [
@@ -99,6 +139,6 @@
   },
   "prettier": "@adonisjs/prettier-config",
   "dependencies": {
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.3"
   }
 }
