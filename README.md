@@ -7,7 +7,11 @@ Add support for sending push notifications via the Firebase Cloud Messaging API.
 Install the package from npm using the following command:
 
 ```bash
+// FOR ADONISJS 6
 npm i @juliendu11/adonis-js-push-notification
+
+// FOR ADONISJS 7
+npm i @juliendu11/adonis-js-push-notification@next
 ```
 
 then run configuration command:
