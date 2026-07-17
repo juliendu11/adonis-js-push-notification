@@ -1,7 +1,7 @@
 {
   "name": "@juliendu11/adonis-js-push-notification",
   "description": "Enables the addition of support for sending FCM push notifications",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "engines": {
     "node": ">=24.0.0"
   },

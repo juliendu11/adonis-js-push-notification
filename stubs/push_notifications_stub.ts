@@ -14,7 +14,7 @@ export class PushNotificationStub extends PushNotification {
     const json = await res.json()
 
     if (!res.ok) {
-      throw new FCMSendException(res.status, res.statusText)
+      throw new FCMSendException(res.status, res.statusText, json)
     }
 
     return json
