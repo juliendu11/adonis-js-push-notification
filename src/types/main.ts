@@ -1,3 +1,17 @@
+/**
+ * Error codes returned by the FCM HTTP v1 API in the `error.details[].errorCode` field.
+ * See https://firebase.google.com/docs/reference/fcm/rest/v1/ErrorCode
+ */
+export type FcmErrorCode =
+  | 'UNSPECIFIED_ERROR'
+  | 'INVALID_ARGUMENT'
+  | 'UNREGISTERED'
+  | 'SENDER_ID_MISMATCH'
+  | 'QUOTA_EXCEEDED'
+  | 'UNAVAILABLE'
+  | 'INTERNAL'
+  | 'THIRD_PARTY_AUTH_ERROR'
+
 export interface PushNotificationConfig {
   clientEmail: string
   privateKey: string
