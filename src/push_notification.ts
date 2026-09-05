@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken'
 import {
-  FcmData,
-  FcmMessageOptions,
-  FcmNotification,
-  GoogleAccessTokenResponse,
-  PushNotificationConfig,
+  type FcmData,
+  type FcmMessageOptions,
+  type FcmNotification,
+  type FcmPlatformOptions,
+  type GoogleAccessTokenResponse,
+  type PushNotificationConfig,
 } from './types/main.js'
 import OAuthException from './exceptions/oauth_exception.js'
 import FCMSendException from './exceptions/fcm_exception.js'
@@ -90,21 +91,35 @@ export class PushNotification {
     return json
   }
 
-  public async sendToToken(token: string, notification?: FcmNotification, data?: FcmData) {
+  public async sendToToken(
+    token: string,
+    notification?: FcmNotification,
+    data?: FcmData,
+    platform?: FcmPlatformOptions
+  ) {
     const message = {
       token,
       notification,
       data,
+      android: platform?.android,
+      apns: platform?.apns,
     }
 
     return this.sendRaw(message)
   }
 
-  public async sendToTopic(topic: string, notification?: FcmNotification, data?: FcmData) {
+  public async sendToTopic(
+    topic: string,
+    notification?: FcmNotification,
+    data?: FcmData,
+    platform?: FcmPlatformOptions
+  ) {
     const message = {
       topic,
       notification,
       data,
+      android: platform?.android,
+      apns: platform?.apns,
     }
 
     return this.sendRaw(message)

@@ -79,6 +79,52 @@ test.group('PushNotification', () => {
     catcherInstance.stop()
   })
 
+  test('Should include android and apns sound config when use sendToToken()', async ({
+    assert,
+  }) => {
+    const catcherInstance = new Catcher(6556)
+
+    await catcherInstance.start()
+
+    const notification = new PushNotificationStub({
+      clientEmail: 'test@test.com',
+      privateKey: 'privateKey',
+      projectId: 'test-project',
+
+      stubUrl: 'http://localhost:6556/push',
+    })
+
+    await notification.sendToToken(
+      'TOKEN_ABC123',
+      {
+        title: 'Breaking News',
+        body: 'This is the body of the breaking news.',
+      },
+      {
+        articleId: '12345',
+      },
+      {
+        android: { notification: { sound: 'default', channelId: 'reminders' } },
+        apns: { payload: { aps: { sound: 'default' } } },
+      }
+    )
+
+    const messagesResponse = await catcherInstance.getNotifications(0, 10)
+
+    assert.equal(messagesResponse.total, 1)
+    assert.equal(
+      messagesResponse.notifications[0].data.message.android.notification.sound,
+      'default'
+    )
+    assert.equal(
+      messagesResponse.notifications[0].data.message.android.notification.channelId,
+      'reminders'
+    )
+    assert.equal(messagesResponse.notifications[0].data.message.apns.payload.aps.sound, 'default')
+
+    catcherInstance.stop()
+  })
+
   test('Should format notification correctly when use sendRaw()', async ({ assert }) => {
     const catcherInstance = new Catcher(6556)
 
