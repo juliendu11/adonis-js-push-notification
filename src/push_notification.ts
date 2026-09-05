@@ -3,6 +3,7 @@ import type {
   FcmData,
   FcmMessageOptions,
   FcmNotification,
+  FcmPlatformOptions,
   GoogleAccessTokenResponse,
   PushNotificationConfig,
 } from './types.js'
@@ -90,21 +91,35 @@ export class PushNotification {
     return json
   }
 
-  public async sendToToken(token: string, notification?: FcmNotification, data?: FcmData) {
+  public async sendToToken(
+    token: string,
+    notification?: FcmNotification,
+    data?: FcmData,
+    platform?: FcmPlatformOptions
+  ) {
     const message = {
       token,
       notification,
       data,
+      android: platform?.android,
+      apns: platform?.apns,
     }
 
     return this.sendRaw(message)
   }
 
-  public async sendToTopic(topic: string, notification?: FcmNotification, data?: FcmData) {
+  public async sendToTopic(
+    topic: string,
+    notification?: FcmNotification,
+    data?: FcmData,
+    platform?: FcmPlatformOptions
+  ) {
     const message = {
       topic,
       notification,
       data,
+      android: platform?.android,
+      apns: platform?.apns,
     }
 
     return this.sendRaw(message)

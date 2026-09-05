@@ -28,12 +28,37 @@ export type FcmNotification = {
 
 export type FcmData = Record<string, string>
 
+export type FcmAndroidConfig = {
+  notification?: {
+    sound?: string
+    channelId?: string
+    [key: string]: unknown
+  }
+  [key: string]: unknown
+}
+
+export type FcmApnsConfig = {
+  payload?: {
+    aps?: {
+      sound?: string
+      [key: string]: unknown
+    }
+    [key: string]: unknown
+  }
+  [key: string]: unknown
+}
+
+export type FcmPlatformOptions = {
+  android?: FcmAndroidConfig
+  apns?: FcmApnsConfig
+}
+
 export type FcmMessageOptions = {
   token?: string
   notification?: FcmNotification
   data?: FcmData
-  android?: any
-  apns?: any
+  android?: FcmAndroidConfig
+  apns?: FcmApnsConfig
   webpush?: any
   topic?: string
 }
