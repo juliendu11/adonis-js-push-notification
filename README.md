@@ -76,6 +76,36 @@ The PushNotification service provides the following methods:
 | sendToTopic | Send a message to a topic (Topic name)           |
 | sendRaw     | Basic method used by sendToToken and sendToTopic |
 
+### Platform-specific options (sound, Android channel, ...)
+
+`sendToToken` and `sendToTopic` accept an optional 4th argument to set Android/iOS-specific options, such as the
+notification sound or the Android notification channel:
+
+```typescript
+await pushNotification.sendToToken(
+  <TOKEN>,
+  { title: 'Title', body: 'Body' },
+  { articleId: '12345' },
+  {
+    android: { notification: { sound: 'default', channelId: 'reminders' } },
+    apns: { payload: { aps: { sound: 'default' } } },
+  }
+)
+```
+
+- `apns.payload.aps.sound` controls the sound on iOS. Use `'default'` for the system sound, or the name of a custom
+  sound file bundled in the iOS app.
+- `android.notification.sound` and `android.notification.channelId` control the sound on Android. Since Android 8
+  (API 26), the sound is actually tied to a [Notification
+  Channel](https://developer.android.com/develop/ui/views/notifications/channels) created natively in the app, not to
+  the FCM payload — `channelId` must match a channel already created on the device, otherwise Android silently falls
+  back to a default channel/sound.
+
+These options are passed through as-is to the underlying FCM `message.android`/`message.apns` fields, so any other
+[FCM Android](https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidconfig) or
+[FCM APNs](https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#apnsconfig) option can be passed
+the same way.
+
 ## Error handling
 
 When a send fails (`sendToToken`, `sendToTopic`, `sendRaw`), the promise rejects with a `FCMSendException`
